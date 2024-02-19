@@ -1,0 +1,419 @@
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+
+/**
+ *
+ * @author User
+ */
+public class ManageUsers extends javax.swing.JFrame {
+
+    /**
+     * Creates new form ManageUsers
+     */
+    public ManageUsers() {
+        initComponents();
+        setTable();
+        
+    }
+    String UserName;
+    String fullName;
+    String position;
+    String email;
+    int id;
+    DefaultTableModel model;
+    
+    public void setTable(){
+        
+        try{
+            Connection con = DBConnection.getConnection();
+            java.sql.Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("select * from usersinfo");
+            
+            while (rs.next()){
+            String packageId = rs.getString("id");
+            String username = rs.getString("username");
+            String fullname = rs.getString ("fullname");
+            String email = rs.getString("email");
+            String position1 = rs.getString ("position");
+            
+            
+            Object[] obj = {packageId, username, fullname, email, position1};
+            model = (DefaultTableModel)userTbl.getModel();
+            model.addRow(obj);
+       
+            }
+            
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public boolean addUser(){
+        boolean isAdded = false;
+        id = Integer.parseInt(userIdTx.getText());
+        UserName = usernameTx.getText();
+        fullName = fullNameTx.getText();
+        email = emailTx.getText();
+        position = positionTx.getText();
+        
+        try{
+                Connection con = DBConnection.getConnection();
+                String sql = "insert into usersinfo values(?,?,?,?,?)";
+                PreparedStatement pst = con.prepareStatement(sql);
+                
+                pst.setInt(1, id);
+                pst.setString(2, UserName);
+                pst.setString(3, fullName);
+                pst.setString (4, email);
+                pst.setString(5, position);
+                
+                
+                
+                int rowCount = pst.executeUpdate();
+                if (rowCount > 0) {
+                    isAdded = true;
+                }else {
+                    isAdded = false;
+                }
+        }catch(Exception e){
+            e.printStackTrace();
+            }
+        return isAdded;
+    
+    }
+    
+    //method too update  package
+    public boolean updateUsers(){
+        boolean isUpdated = false;
+        id = Integer.parseInt(userIdTx.getText());
+        UserName = usernameTx.getText();
+        fullName = fullNameTx.getText();
+        email = emailTx.getText();
+        position = positionTx.getText();
+        
+        
+        
+        try{
+            Connection con = DBConnection.getConnection();
+            String sql = "update usersinfo set username = ?, fullname = ?, email = ?, position = ? where id = ?";
+            PreparedStatement pst = con.prepareStatement(sql);
+            
+                
+                pst.setString(1, UserName);
+                pst.setString(2, fullName);
+                pst.setString (3, email);
+                pst.setString(4, position);
+                pst.setInt(5, id);
+                
+            int rowCount = pst.executeUpdate();
+            if (rowCount > 0) {
+                isUpdated = true;
+            }else {
+                isUpdated = false;
+            }
+        
+    }catch (Exception e){
+        e.printStackTrace();    
+    }
+    return isUpdated;
+    }
+    
+    //delete method  to remove package
+    public boolean removeUsers(){
+        boolean isDeleted = false;
+        id = Integer.parseInt(userIdTx.getText());
+        
+        try{
+            Connection con = DBConnection.getConnection();
+            String sql = "delete from usersinfo where id = ?";
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setInt(1, id);
+            
+            int rowCount = pst.executeUpdate();
+            if (rowCount > 0) {
+                isDeleted = true;
+            }else {
+                isDeleted = false;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return isDeleted;   
+    }
+
+    public void clearTable(){
+        DefaultTableModel model = (DefaultTableModel) userTbl.getModel();
+        model.setRowCount(0);
+    }
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jPanel2 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        userTbl = new javax.swing.JTable();
+        jLabel2 = new javax.swing.JLabel();
+        userIdTx = new rojerusan.RSMetroTextPlaceHolder();
+        jLabel3 = new javax.swing.JLabel();
+        usernameTx = new rojerusan.RSMetroTextPlaceHolder();
+        jLabel4 = new javax.swing.JLabel();
+        fullNameTx = new rojerusan.RSMetroTextPlaceHolder();
+        jLabel5 = new javax.swing.JLabel();
+        positionTx = new rojerusan.RSMetroTextPlaceHolder();
+        jLabel6 = new javax.swing.JLabel();
+        emailTx = new rojerusan.RSMetroTextPlaceHolder();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel2.setBackground(new java.awt.Color(255, 204, 0));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 0, 10, 460));
+
+        jButton1.setBackground(new java.awt.Color(255, 0, 51));
+        jButton1.setText("Delete");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 380, -1, -1));
+
+        jButton2.setBackground(new java.awt.Color(0, 153, 0));
+        jButton2.setText("Add");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 380, -1, -1));
+
+        jButton3.setBackground(new java.awt.Color(255, 255, 204));
+        jButton3.setText("Update");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 380, -1, -1));
+
+        userTbl.setFont(new java.awt.Font("Yu Gothic UI Light", 1, 14)); // NOI18N
+        userTbl.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "User Id", "Username", "Full Name", "Email", "Position"
+            }
+        ));
+        userTbl.setGridColor(new java.awt.Color(0, 204, 204));
+        userTbl.setRowHeight(30);
+        userTbl.setShowGrid(true);
+        userTbl.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                userTblMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(userTbl);
+
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 110, 550, 260));
+
+        jLabel2.setText("User ID");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 30, 90, -1));
+
+        userIdTx.setBackground(new java.awt.Color(255, 204, 0));
+        userIdTx.setForeground(new java.awt.Color(0, 0, 0));
+        userIdTx.setBorderColor(new java.awt.Color(0, 204, 204));
+        userIdTx.setBotonColor(new java.awt.Color(0, 204, 204));
+        userIdTx.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        userIdTx.setPlaceholder("user id");
+        userIdTx.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                userIdTxActionPerformed(evt);
+            }
+        });
+        getContentPane().add(userIdTx, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, 170, 40));
+
+        jLabel3.setText("Username");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 100, 90, -1));
+
+        usernameTx.setBackground(new java.awt.Color(255, 204, 0));
+        usernameTx.setForeground(new java.awt.Color(0, 0, 0));
+        usernameTx.setBorderColor(new java.awt.Color(0, 204, 204));
+        usernameTx.setBotonColor(new java.awt.Color(0, 204, 204));
+        usernameTx.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        usernameTx.setPlaceholder("user name");
+        getContentPane().add(usernameTx, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 170, 40));
+
+        jLabel4.setText("Full Name");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 170, 90, -1));
+
+        fullNameTx.setBackground(new java.awt.Color(255, 204, 0));
+        fullNameTx.setForeground(new java.awt.Color(0, 0, 0));
+        fullNameTx.setBorderColor(new java.awt.Color(0, 204, 204));
+        fullNameTx.setBotonColor(new java.awt.Color(0, 204, 204));
+        fullNameTx.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        fullNameTx.setPlaceholder("full name");
+        getContentPane().add(fullNameTx, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, 170, 40));
+
+        jLabel5.setText("Position");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 310, 90, -1));
+
+        positionTx.setBackground(new java.awt.Color(255, 204, 0));
+        positionTx.setForeground(new java.awt.Color(0, 0, 0));
+        positionTx.setBorderColor(new java.awt.Color(0, 204, 204));
+        positionTx.setBotonColor(new java.awt.Color(0, 204, 204));
+        positionTx.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        positionTx.setPlaceholder("position");
+        getContentPane().add(positionTx, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 330, 170, 40));
+
+        jLabel6.setText("email");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 240, 90, -1));
+
+        emailTx.setBackground(new java.awt.Color(255, 204, 0));
+        emailTx.setForeground(new java.awt.Color(0, 0, 0));
+        emailTx.setBorderColor(new java.awt.Color(0, 204, 204));
+        emailTx.setBotonColor(new java.awt.Color(0, 204, 204));
+        emailTx.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        emailTx.setPlaceholder("email");
+        getContentPane().add(emailTx, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 260, 170, 40));
+
+        setSize(new java.awt.Dimension(832, 469));
+        setLocationRelativeTo(null);
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void userTblMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userTblMouseClicked
+
+        int rowNo = userTbl.getSelectedRow();
+        TableModel model = userTbl.getModel();
+
+        userIdTx.setText(model.getValueAt(rowNo, 0).toString());
+        usernameTx.setText(model.getValueAt(rowNo, 1).toString());
+        fullNameTx.setText(model.getValueAt(rowNo, 2).toString());
+        emailTx.setText(model.getValueAt(rowNo, 3).toString());
+        positionTx.setText(model.getValueAt(rowNo, 4).toString());
+        
+
+    }//GEN-LAST:event_userTblMouseClicked
+
+    private void userIdTxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userIdTxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_userIdTxActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+          if (addUser()== true){
+        JOptionPane.showMessageDialog(this, "New user added");
+        clearTable();
+        setTable();
+        }
+        else{
+             JOptionPane.showMessageDialog(this, "addition failure!");
+                        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+       if (updateUsers()== true){
+        JOptionPane.showMessageDialog(this, "User update Successful");
+        clearTable();
+        setTable();
+        }
+        else{
+             JOptionPane.showMessageDialog(this, "Update failure!");
+                        }
+       
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        if (removeUsers()== true){
+        JOptionPane.showMessageDialog(this, "One user removed");
+        clearTable();
+        setTable();
+        }
+        else{
+             JOptionPane.showMessageDialog(this, "Deletion failure!");
+                        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(ManageUsers.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(ManageUsers.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(ManageUsers.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(ManageUsers.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new ManageUsers().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private rojerusan.RSMetroTextPlaceHolder emailTx;
+    private rojerusan.RSMetroTextPlaceHolder fullNameTx;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane2;
+    private rojerusan.RSMetroTextPlaceHolder positionTx;
+    private rojerusan.RSMetroTextPlaceHolder userIdTx;
+    private javax.swing.JTable userTbl;
+    private rojerusan.RSMetroTextPlaceHolder usernameTx;
+    // End of variables declaration//GEN-END:variables
+}
